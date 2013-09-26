@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Welcome to Jekyll!"
-date:   2013-08-25 00:27:05
-categories: jekyll update
+date:   2013-08-29 00:27:05
+categories: jekyllb aaa
 ---
 
 You'll find this post in your `_posts` directory - edit this post and re-build (or run with the `-w` switch) to see your changes!

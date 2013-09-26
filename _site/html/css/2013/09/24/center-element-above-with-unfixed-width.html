@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Center element above with unfixed width</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Ivan's toy</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Center element above with unfixed width</h2>
+<p class="meta">24 Sep 2013</p>
+
+<div class="post">
+<p>The issue I got with centering is a little bit different from what I could find with a solution. Here&#39;s the thing.</p>
+
+<p>Say I have an icon, I need to display a label of the icon name right above it. The icon and the label needs to be horizontally aligned.
+<img src="/assets/2013-09-25-center-element-above-with-unfixed-width-1.PNG" alt="screen shot"></p>
+
+<p>The general centering issue is center some element in a container, whether the width of the element is fixed or not will make it more or less complicated, but anyway, it can be solved.
+Something I found <a href="http://css-tricks.com/centering-in-the-unknown/">here</a> may be useful later.</p>
+
+<p>Since the label is above the icon, outside it&#39;s container. Moving it out of the document flow is a pretty straightforward idea, let&#39;s use <code>absolute</code> position. All the solutions I found is talking about centering inside, now the label is outside its container, ways like table layout can&#39;t apply.</p>
+
+<p>However, I do need a container. If I can make the container center aligned, maybe things are getting better. I already know how to center something if width is fixed. </p>
+
+<div class="highlight"><pre><code class="css"><span class="nc">.wrapper</span> <span class="p">{</span>
+    <span class="k">left</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">margin-left</span><span class="o">:</span> <span class="m">-150px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Despite the fact that the label&#39;s width is not fixed, I know it won&#39;t large than some extent, like 200px. If I add a container with 200px width to it, make container centered, then make itself centered in the container, problem solved.</p>
+
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;wrapper&quot;</span>  <span class="na">ng-show=</span><span class="s">&quot;isCurrent&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;&lt;p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+.wrapper {
+    width: 300px;
+    top: -5px;
+    height:20px;
+    position: absolute;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+}
+</code></pre></div>
+
+<p>So far looks great. the label aligns centered with <code>text-align: center</code></p>
+
+<p><img src="/assets/2013-09-25-center-element-above-with-unfixed-width-2.PNG" alt="screen shot"></p>
+
+<p>Now I&#39;m trying to add background. add <code>background-color</code> to <code>&lt;p&gt;</code> won&#39;t work, because the width of <code>&lt;p&gt;</code> is actually 100%. The background color will be covered all around. </p>
+
+<p><img src="/assets/2013-09-25-center-element-above-with-unfixed-width-3.PNG" alt="screen shot"></p>
+
+<p>I need some container that only extends to it&#39;s container&#39;s width, I&#39;m lucky to try <code>span</code> in the first place. It works like a charm.
+I found <a href="http://hiox.org/6576-block-vs-inline-level-elements.php">this</a> explains well the difference between <code>div</code> and <code>span</code>.
+Another solution after reading it is to change <code>&lt;p&gt;</code> to <code>display:inline</code></p>
+
+<p>Below is what I copied above, thanks to the author.</p>
+
+<p>The characteristics of block elements <code>&lt;div&gt;, &lt;p&gt;, &lt;h1&gt;, &lt;form&gt;, &lt;ul&gt; and &lt;li&gt;</code> include:</p>
+
+<ul>
+<li>Always begin on a new line</li>
+<li>Height, line-height and top and bottom margins can be manipulated</li>
+<li>Width defaults to 100% of their containing element, unless a width is specified</li>
+</ul>
+
+<p>The characteristics of inline elements <code>&lt;span&gt;, &lt;a&gt;, &lt;label&gt;, &lt;input&gt;, &lt;img&gt;, &lt;strong&gt; and &lt;em&gt;</code>, on the other hand, are the opposite of block elements:</p>
+
+<ul>
+<li>Begin on the same line</li>
+<li>Height, line-height and top and bottom margins can&#39;t be changed</li>
+<li>Width is as long as the text/image and can&#39;t be manipulated</li>
+</ul>
+
+<p>To change an element&#39;s status, you can use display: inline or display: block. But what&#39;s the point of changing an element from being block to inline, or vice-versa? Well, at first it may seem like you might hardly ever use this trick, but in actual fact, this is a very powerful technique, which you can use whenever you want to:</p>
+
+<ul>
+<li>Have an inline element start on a new line</li>
+<li>Have a block element start on the same line</li>
+<li><strong>Control the width of an inline element (particularly useful for navigation links)</strong></li>
+<li>Manipulate the height of an inline element</li>
+<li>Set a background colour as wide as the text for block elements, without having to specify a width</li>
+</ul>
+
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                 <p>
+                  Ivan<br />
+                  Shanghai, CHINA<br />
+                  ivan.wang2010@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/yourusername/">github.com/yourusername</a><br />
+                  <a href="http://twitter.com/yourusername/">twitter.com/yourusername</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+    </body>
+</html>
