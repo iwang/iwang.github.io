@@ -8,7 +8,7 @@ categories: html angular angularjs
 
 # $render
 
-The other day I asked a team member to [ui-tinymce](https://github.com/angular-ui/ui-tinymce) into our project. A half day later, he told me that it doesn't work with Angular rc3 while rc2 is ok. But he found some guy reported the same [issue](https://github.com/angular/angular.js/issues/4560) and got a workaround from [another thread](https://github.com/angular-ui/ui-tinymce/issues/49)
+The other day I asked a team member to introduce [ui-tinymce](https://github.com/angular-ui/ui-tinymce) into our project. A half day later, he told me that it doesn't work with Angular rc3 while rc2 is ok. But he found some guy reported the same [issue](https://github.com/angular/angular.js/issues/4560) and got a workaround from [another thread](https://github.com/angular-ui/ui-tinymce/issues/49)
 
 The issue is all about $render function isn't called when model is actually changed. So no content can be set into tinymce.
 
