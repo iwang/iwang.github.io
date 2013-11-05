@@ -8,9 +8,9 @@ categories: html angular angularjs
 
 # $render
 
-The other day I asked a team member to introduce [ui-tinymce](https://github.com/angular-ui/ui-tinymce) into our project. A half day later, he told me that it doesn't work with Angular rc3 while rc2 is ok. But he found some guy reported the same [issue](https://github.com/angular/angular.js/issues/4560) and got a workaround from [another thread](https://github.com/angular-ui/ui-tinymce/issues/49)
+The other day I asked a team member to introduce [ui-tinymce](https://github.com/angular-ui/ui-tinymce) into our project. A half day later, he told me that it didn't work with Angular rc3 while rc2 was ok. He found some guy reported the same [issue](https://github.com/angular/angular.js/issues/4560) and got a workaround from [another thread](https://github.com/angular-ui/ui-tinymce/issues/49) which was not a decent fix.
 
-The issue is all about $render function isn't called when model is actually changed. So no content can be set into tinymce.
+The issue is all about $render function isn't called when model is actually changed. No content can be set into tinymce.
 
 {% highlight javascript %}
 return {
@@ -27,9 +27,9 @@ return {
 }
 {% endhighlight %}
 
-What this library did is very common when you want to wrap a 3rd party library into Angular. $render is what you need to set the value back into the 3rd party widget given any change. But this function never gets called if using Angular rc3!
+What this library did is very common if you want to wrap a 3rd party library into Angular. $render is what you need to set the value back into the 3rd party widget given any change. But this function never gets called if using Angular rc3!
 
-I got some time to look into this issue today. I dived into Angular's source and found what it says about *$render* orginally.
+I got some time to look into this issue today. I dived into Angular's source and found what it documents about *$render*.
 
 {% highlight javascript %}
  /**
@@ -44,7 +44,7 @@ I got some time to look into this issue today. I dived into Angular's source and
   this.$render = noop;
 {% endhighlight %}  
 
-It is empty in the first place and should be implemented by the user. That's what the author of the ui-tinymce did so far. It is supposed to be working. To diagnose this issue, I decided to find where this function is called by Angular. It's still in NgModelController a few lines below the defination of $render.
+It is empty by default and should be implemented by the user. That's what the author of the ui-tinymce did so far. It is supposed to be working. To diagnose this issue, I decided to find where this function is called by Angular. It's still in NgModelController a few lines below the defination of $render.
 
 {% highlight javascript %}
 // model -> value
@@ -76,7 +76,7 @@ if (ctrl.$modelValue !== value) {
 });
 {% endhighlight %} 
 
-Check the bottom line, if the value changes, $render will be called. I put some log right below where I added the comment. And I also added some log when $render is called in ui-tinymce. The former works as expected but the latter never gets called. Obviously, the $render is not the one defined in ui-tinymce. I have to dig more into this. I logged the $render function, it was 
+Check the bottom line, if the value changes, $render is called. I put some log right below where I added the comment. I also added some log when $render is called in ui-tinymce. The former works as expected but the latter never gets called. Obviously, the actual $render is not the one defined in ui-tinymce. I have to dig more into this. I logged the $render function, it was 
 
 {% highlight javascript %}
 element.val(ctrl.$isEmpty(ctrl.$viewValue) ? '' : ctrl.$viewValue);
@@ -92,7 +92,7 @@ ctrl.$render = function() {
 }
 {% endhighlight %}
 
-I added some log above it and witneessed that this definition is called after the counterpart in ui-tinymce. I then switched to rc2, verified the result is on the contrary. 
+I added some log above it and witnessed that this definition is called after the counterpart in ui-tinymce. I then switched to rc2, verified the result is on the contrary. 
 
 It's now clear that the root cause of the issue is that the link function in ui-tinymce is called earlier in rc3. There must be more than one directive defined on the element, the order of the link function is controlled by the priority property. 
 
@@ -122,16 +122,16 @@ The first attempt is to find what is the priority of the ngModel directive. Sear
 
 # The Mystery
 
-I can call it a day if I want because the issue if fixed. But I still leaves some questions unsolved? 
+I can call it a day if I want because the issue is fixed. But I still leave some questions unsolved:
 
 * I can't even name the directive by calling it "the native one"
-* Actually rc3 didn't change the priority related to this issue, both directives have default priority "0" in this case. Why the order changes between rc2 and rc3?
+* Actually rc3 didn't change the priority related to this issue, both directives have default priority "0" in this case. Why the invoking order changes between rc2 and rc3?
 
 
 ## directive under the hood
 
-There's some directive added by Angular implicitly during initialization, like `input`, `textarea`, `form`. Despite the name, it's actual an Angular diretive. This is very import and may sould confusing when you first come to it. I think why Angular doesn't pre-define those directives as `ng-input`, `ng-textarea` is to leave user no choice but always stick to them. Otherwise if I don't want to use `ng-input`, I can switch to `input` by simply use `input` tag. 
-All the native Angular directive name actually goes with a directive, the rule is defined as below. I'd like to list them all because it helps me understand other stuff which I thought was magic before. During the compiling phase, Angular will go through the DOM and do the name-and-directive matching. Native directive will use beflow rule and customized one will use "same name matching". rule. e.g. `data-ng-input` will be normalized into `input` and goes with `inputDirecive`. `data-ng-customized-div` will be normalized into `customizedDiv` and go with `customizedDiv` directive.
+There's some directive added by Angular implicitly during initialization, like `input`, `textarea`, `form`. Despite the name, it's actual an Angular directive. This is very important and may sound confusing when you first come to it. I think why Angular doesn't pre-define those directives as `ng-input`, `ng-textarea` is to leave user no choice but always stick to them. Otherwise if you don't want to use `ng-input`, youcan switch to `input` by simply use `input` tag. That being said, elements like `input`, `textarea` are always directives.
+All the native Angular directive name actually goes with a directive, the rule is defined as below. 
 {% highlight javascript %}
 angularModule('ng', ['ngLocale'], ['$provide',
     function ngModule($provide) {
@@ -207,6 +207,7 @@ angularModule('ng', ['ngLocale'], ['$provide',
   ]);
 }
 {% endhighlight %}
+I'd like to list them all because it helps me understand other stuff which I thought was magic before. During the compiling phase, Angular will go through the DOM and do the name-and-directive matching. Native directive will use beflow rule and customized one will use "same name matching". rule. e.g. `data-ng-input` will be normalized into `input` and goes with `inputDirecive`. `data-ng-customized-div` will be normalized into `customizedDiv` and go with `customizedDiv` directive.
 
 Let's get to the `inputDirecive`. 
 {% highlight javascript %}
@@ -236,7 +237,9 @@ var inputType = {
 
 ## textInputType
 
-What is `textInputType`. It's a link function for all input element. It adds some common functions on ngModel controller and some event listener. It also addes validation. It also provide a default implementation for some `noop` function defined in ngModelController. `$render` is one of it. But you can override it in your link, like ui-tinymce does.
+What is `textInputType`? It's a link function for all input elements. It adds 
+* some common functions on ngModel controller 
+* some event listener. It also addes validation. It also provide a default implementation for some `noop` function defined in ngModelController. `$render` is one of it. But you can override it in your link, like ui-tinymce does.
 In our case, there're actually 3 directives bound to `textarea`, let's take a close look at them. 'textarea' is the implicit directive which has textInputType as its link function.
 
 {% highlight javascript %}
