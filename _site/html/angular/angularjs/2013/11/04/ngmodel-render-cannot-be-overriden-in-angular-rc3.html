@@ -28,9 +28,9 @@
 <div class="post">
 <h1>$render</h1>
 
-<p>The other day I asked a team member to <a href="https://github.com/angular-ui/ui-tinymce">ui-tinymce</a> into our project. A half day later, he told me that it doesn&#39;t work with Angular rc3 while rc2 is ok. But he found some guy reported the same <a href="https://github.com/angular/angular.js/issues/4560">issue</a> and got a workaround from <a href="https://github.com/angular-ui/ui-tinymce/issues/49">another thread</a></p>
+<p>The other day I asked a team member to introduce <a href="https://github.com/angular-ui/ui-tinymce">ui-tinymce</a> into our project. A half day later, he told me that it didn&#39;t work with Angular rc3 while rc2 was ok. He found some guy reported the same <a href="https://github.com/angular/angular.js/issues/4560">issue</a> and got a workaround from <a href="https://github.com/angular-ui/ui-tinymce/issues/49">another thread</a> which was not a decent fix.</p>
 
-<p>The issue is all about $render function isn&#39;t called when model is actually changed. So no content can be set into tinymce.</p>
+<p>The issue is all about $render function isn&#39;t called when model is actually changed. No content can be set into tinymce.</p>
 
 <div class="highlight"><pre><code class="javascript"><span class="k">return</span> <span class="p">{</span>
     <span class="nx">require</span><span class="o">:</span> <span class="s1">&#39;ngModel&#39;</span><span class="p">,</span>
@@ -46,9 +46,9 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<p>What this library did is very common when you want to wrap a 3rd party library into Angular. $render is what you need to set the value back into the 3rd party widget given any change. But this function never gets called if using Angular rc3!</p>
+<p>What this library did is very common if you want to wrap a 3rd party library into Angular. $render is what you need to set the value back into the 3rd party widget given any change. But this function never gets called if using Angular rc3!</p>
 
-<p>I got some time to look into this issue today. I dived into Angular&#39;s source and found what it says about <em>$render</em> orginally.</p>
+<p>I got some time to look into this issue today. I dived into Angular&#39;s source and found what it documents about <em>$render</em>.</p>
 
 <div class="highlight"><pre><code class="javascript"> <span class="cm">/**</span>
 <span class="cm">   * @ngdoc function</span>
@@ -63,7 +63,7 @@
 </code></pre></div>
   
 
-<p>It is empty in the first place and should be implemented by the user. That&#39;s what the author of the ui-tinymce did so far. It is supposed to be working. To diagnose this issue, I decided to find where this function is called by Angular. It&#39;s still in NgModelController a few lines below the defination of $render.</p>
+<p>It is empty by default and should be implemented by the user. That&#39;s what the author of the ui-tinymce did so far. It is supposed to be working. To diagnose this issue, I decided to find where this function is called by Angular. It&#39;s still in NgModelController a few lines below the defination of $render.</p>
 
 <div class="highlight"><pre><code class="javascript"><span class="c1">// model -&gt; value</span>
 <span class="kd">var</span> <span class="nx">ctrl</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
@@ -95,7 +95,7 @@
 </code></pre></div>
  
 
-<p>Check the bottom line, if the value changes, $render will be called. I put some log right below where I added the comment. And I also added some log when $render is called in ui-tinymce. The former works as expected but the latter never gets called. Obviously, the $render is not the one defined in ui-tinymce. I have to dig more into this. I logged the $render function, it was </p>
+<p>Check the bottom line, if the value changes, $render is called. I put some log right below where I added the comment. I also added some log when $render is called in ui-tinymce. The former works as expected but the latter never gets called. Obviously, the actual $render is not the one defined in ui-tinymce. I have to dig more into this. I logged the $render function, it was </p>
 
 <div class="highlight"><pre><code class="javascript"><span class="nx">element</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">ctrl</span><span class="p">.</span><span class="nx">$isEmpty</span><span class="p">(</span><span class="nx">ctrl</span><span class="p">.</span><span class="nx">$viewValue</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="nx">ctrl</span><span class="p">.</span><span class="nx">$viewValue</span><span class="p">);</span>
 </code></pre></div>
@@ -111,7 +111,7 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<p>I added some log above it and witneessed that this definition is called after the counterpart in ui-tinymce. I then switched to rc2, verified the result is on the contrary. </p>
+<p>I added some log above it and witnessed that this definition is called after the counterpart in ui-tinymce. I then switched to rc2, verified the result is on the contrary. </p>
 
 <p>It&#39;s now clear that the root cause of the issue is that the link function in ui-tinymce is called earlier in rc3. There must be more than one directive defined on the element, the order of the link function is controlled by the priority property. </p>
 
@@ -147,17 +147,17 @@
 
 <h1>The Mystery</h1>
 
-<p>I can call it a day if I want because the issue if fixed. But I still leaves some questions unsolved? </p>
+<p>I can call it a day if I want because the issue is fixed. But I still leave some questions unsolved:</p>
 
 <ul>
 <li>I can&#39;t even name the directive by calling it &quot;the native one&quot;</li>
-<li>Actually rc3 didn&#39;t change the priority related to this issue, both directives have default priority &quot;0&quot; in this case. Why the order changes between rc2 and rc3?</li>
+<li>Actually rc3 didn&#39;t change the priority related to this issue, both directives have default priority &quot;0&quot; in this case. Why the invoking order changes between rc2 and rc3?</li>
 </ul>
 
 <h2>directive under the hood</h2>
 
-<p>There&#39;s some directive added by Angular implicitly during initialization, like <code>input</code>, <code>textarea</code>, <code>form</code>. Despite the name, it&#39;s actual an Angular diretive. This is very import and may sould confusing when you first come to it. I think why Angular doesn&#39;t pre-define those directives as <code>ng-input</code>, <code>ng-textarea</code> is to leave user no choice but always stick to them. Otherwise if I don&#39;t want to use <code>ng-input</code>, I can switch to <code>input</code> by simply use <code>input</code> tag. 
-All the native Angular directive name actually goes with a directive, the rule is defined as below. I&#39;d like to list them all because it helps me understand other stuff which I thought was magic before. During the compiling phase, Angular will go through the DOM and do the name-and-directive matching. Native directive will use beflow rule and customized one will use &quot;same name matching&quot;. rule. e.g. <code>data-ng-input</code> will be normalized into <code>input</code> and goes with <code>inputDirecive</code>. <code>data-ng-customized-div</code> will be normalized into <code>customizedDiv</code> and go with <code>customizedDiv</code> directive.</p>
+<p>There&#39;s some directive added by Angular implicitly during initialization, like <code>input</code>, <code>textarea</code>, <code>form</code>. Despite the name, it&#39;s actual an Angular directive. This is very important and may sound confusing when you first come to it. I think why Angular doesn&#39;t pre-define those directives as <code>ng-input</code>, <code>ng-textarea</code> is to leave user no choice but always stick to them. Otherwise if you don&#39;t want to use <code>ng-input</code>, youcan switch to <code>input</code> by simply use <code>input</code> tag. That being said, elements like <code>input</code>, <code>textarea</code> are always directives.
+All the native Angular directive name actually goes with a directive, the rule is defined as below. </p>
 
 <div class="highlight"><pre><code class="javascript"><span class="nx">angularModule</span><span class="p">(</span><span class="s1">&#39;ng&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ngLocale&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;$provide&#39;</span><span class="p">,</span>
     <span class="kd">function</span> <span class="nx">ngModule</span><span class="p">(</span><span class="nx">$provide</span><span class="p">)</span> <span class="p">{</span>
@@ -234,6 +234,8 @@ All the native Angular directive name actually goes with a directive, the rule i
 <span class="p">}</span>
 </code></pre></div>
 
+<p>I&#39;d like to list them all because it helps me understand other stuff which I thought was magic before. During the compiling phase, Angular will go through the DOM and do the name-and-directive matching. Native directive will use beflow rule and customized one will use &quot;same name matching&quot;. rule. e.g. <code>data-ng-input</code> will be normalized into <code>input</code> and goes with <code>inputDirecive</code>. <code>data-ng-customized-div</code> will be normalized into <code>customizedDiv</code> and go with <code>customizedDiv</code> directive.</p>
+
 <p>Let&#39;s get to the <code>inputDirecive</code>. </p>
 
 <div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">inputDirective</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$browser&#39;</span><span class="p">,</span> <span class="s1">&#39;$sniffer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$browser</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">)</span> <span class="p">{</span>
@@ -262,7 +264,9 @@ All the native Angular directive name actually goes with a directive, the rule i
 
 <h2>textInputType</h2>
 
-<p>What is <code>textInputType</code>. It&#39;s a link function for all input element. It adds some common functions on ngModel controller and some event listener. It also addes validation. It also provide a default implementation for some <code>noop</code> function defined in ngModelController. <code>$render</code> is one of it. But you can override it in your link, like ui-tinymce does.
+<p>What is <code>textInputType</code>? It&#39;s a link function for all input elements. It adds 
+* some common functions on ngModel controller 
+* some event listener. It also addes validation. It also provide a default implementation for some <code>noop</code> function defined in ngModelController. <code>$render</code> is one of it. But you can override it in your link, like ui-tinymce does.
 In our case, there&#39;re actually 3 directives bound to <code>textarea</code>, let&#39;s take a close look at them. &#39;textarea&#39; is the implicit directive which has textInputType as its link function.</p>
 
 <div class="highlight"><pre><code class="javascript"><span class="p">{</span>
