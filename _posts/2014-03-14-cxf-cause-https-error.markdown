@@ -72,6 +72,6 @@ It was a dependency of pdfbox. We used it to extract text from pdf and generate 
 
 When we invoked CXF, it found the Bouncy Castle and [registered](http://docs.oracle.com/cd/E19879-01/820-4335/6nfqc3qmq/index.html) it as a JCA/JCE cryptography provider. And later coming https request used this provider. 
 
-Jboss should have a JCE order list, and Bouncy Castle should have a higher priority. Once the library is found, Jboss will use it instead. `Cipher.getInstance("RSA/ECB/PKCS1Padding")` can view the current used JCE.
+Jboss should have a JCE order list which makes Bouncy Castle a higher priority. CXF will look for Bouncy Castle during [https invoke](http://svn.apache.org/repos/asf/webservices/wss4j/tags/1_6_12/src/main/java/org/apache/ws/security/WSSConfig.java).Once the library is found, Jboss will use it instead. `Cipher.getInstance("RSA/ECB/PKCS1Padding")` can view the current used JCE.
  
 
