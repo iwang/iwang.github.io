@@ -39,7 +39,11 @@ Quite straightforward so far. However, the result is totally unexpected. The tim
 
 ##### 1. When creating appointment, timezone information needs to be set into formatter
 
-Otherwise it will send local date. e.g. If tHe start time is 15:00:00 (PST), exchange server will also get 15:00:00 (PST). I misunderstood below statement in it's documentation. "in UTC time" actually means you have to parse the date to UTC explicitly. 
+If you set the start time to 15:00:00, it will be converted to UTC based on your jvm's default timezone (the same as your local timezone most likely). So 15:00:00 (PST) will be converted to 22:00:00 (UTC) in this case.
+
+THe root cause is Date only contains the millisecond value. There's no way to set timezone to java.util.Date. However, you can use timeformatter with timezone or Calander to set timezone. The millisecond value will be recalculated according to timezone.
+
+I misunderstood below statement in it's documentation. "in UTC time" actually means you have to parse the date to UTC explicitly. 
 
 > Time and date details that you set by using the java.util.Date class are given as UTC. When you set the date by using the Date class, make sure that it is in UTC time.
 
