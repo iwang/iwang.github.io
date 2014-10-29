@@ -39,8 +39,8 @@ The trick is to save the appointment with attachments first. Then add attendees 
 We use our app to send appointment and check response then update the status back to our app. Only conversationId can be used here to link response message with the appointment. However, if the subject has "re: ", "fw: ", etc. as prefix (no more than 3 characters), the message will be squashed into one conversation automatically. e.g. We sent 3 invites to 3 guys, they should have different conversation id which was saved into our system. If they replied, the 3 invites will have the same conversation id. Thus, we have no idea which appointment the response points to. Adding additional property doesn't work, you can only add it in appointment but it will tag along with the response message.
 We just removed the prefix if exists, it's acceptable because it can't appear in outlook anyway. 
 
-[1] http://support.microsoft.com/kb/197172/EN-US
+[1] [http://support.microsoft.com/kb/197172/EN-US](http://iwang.github.io/work/2014/10/29/ews-issue-collected.html)
 
-[2] http://wp.ofl.me/index.php?p=2081
+[2] [http://wp.ofl.me/index.php?p=2081](http://wp.ofl.me/index.php?p=2081)
 
  
