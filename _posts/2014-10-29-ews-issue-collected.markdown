@@ -40,6 +40,7 @@ We use our app to send appointment and check response then update the status bac
 We just removed the prefix if exists, it's acceptable because it can't appear in outlook anyway. 
 
 [1] http://support.microsoft.com/kb/197172/EN-US
+
 [2] http://wp.ofl.me/index.php?p=2081
 
  
