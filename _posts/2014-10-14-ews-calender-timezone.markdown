@@ -27,7 +27,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 startDate = sf.parse("2014-10-14");
 endDate = sf.parse("2014-10-16");
 List<AttendeeInfo> attendees = new ArrayList<AttendeeInfo>();
-attendees.add(new AttendeeInfo("hermione@deliverymethod.hostpilot.com"));
+attendees.add(new AttendeeInfo("xxx@email.com"));
 
 GetUserAvailabilityResults results = service.getUserAvailability(
         attendees,
