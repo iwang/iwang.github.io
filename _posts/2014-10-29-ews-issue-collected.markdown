@@ -29,7 +29,7 @@ The trick is to save the appointment with attachments first. Then add attendees 
     appointment.getAttachments().addFileAttachment("C:/Users/ivan.wang/Downloads/aaa.txt");
     appointment.save();
 
-    appointment.getRequiredAttendees().add("DEV1", "dev1@deliverymethod.hostpilot.com");
+    appointment.getRequiredAttendees().add("DEV1", "xxx@email.com");
     appointment.update(ConflictResolutionMode.AutoResolve, SendInvitationsOrCancellationsMode.SendOnlyToAll);
 
 # 3. link response message with the original appointment #
