@@ -18,9 +18,9 @@ this.requiredContent = (this.enterBr ? "div" : "p") + (d ? "(" + d.join(",") + "
 It seems as long as `entermode` is not `br`, it's using `p`. That's incorrect. `divMode` should also use `div` as requiredContent. 
 
 
-{% highlight javascript %}
+```javascript
 this.enterBr = a.config.enterMode == CKEDITOR.ENTER_BR;
-{% endhighlight %}
+```
 
 refined to
 
