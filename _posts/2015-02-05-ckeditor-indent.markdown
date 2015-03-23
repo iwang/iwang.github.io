@@ -11,9 +11,9 @@ It turns out you need to enable this by installing 2 plugins: [indent](http://ck
 
 However, this still doesn't work for me. It took me an hour to find out the root cause. For legacy issue, we set `entermode` to `div`, default is `p`, and another option is `br`. Below is the code which makes the button disabled.
 
-{% highlight javascript %}
+```javascript
 this.requiredContent = (this.enterBr ? "div" : "p") + (d ? "(" + d.join(",") + ")" : "{margin-left}");
-{% endhighlight %}
+```
 
 It seems as long as `entermode` is not `br`, it's using `p`. That's incorrect. `divMode` should also use `div` as requiredContent. 
 
@@ -24,9 +24,9 @@ this.enterBr = a.config.enterMode == CKEDITOR.ENTER_BR;
 
 refined to
 
-{% highlight javascript %}
-this.enterBr = a.config.enterMode == CKEDITOR.ENTER_BR || a.config.enterMode == CKEDITOR.ENTER_DIV;
-{% endhighlight %}
+```javascript
+this.enterBr = a.config.enterMode == CKEDITOR.ENTER_BR||a.config.enterMode == CKEDITOR.ENTER_DIV;
+```
 
 After this, the button will be enabled. Adding margin-left will not be removed in div by ckeditor.
 
