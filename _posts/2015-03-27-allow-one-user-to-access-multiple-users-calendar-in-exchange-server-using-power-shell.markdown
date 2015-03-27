@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "allow one user to access multiple users calendar in exchange server using power shell"
+title: "Allow One User To Access Multiple Users Calendar In Exchange Server Using Power Shell"
 date: 2015-03-27 09:00:00
 tags: exchange ews powershell
 categories: dev
@@ -67,6 +67,14 @@ add-MailboxFolderPermission -identity ivan_owner@abc.com:
 This will add permission if it doesn't exist. However, it will throw error if duplicate is found. In this case, Set-MailboxFolderPermission needs to be used.
 
 It would be more convienient if there's an param to ignore the duplicate. Unfortunately there seems to be no.
+
+### close session ###
+
+*Be sure to disconnect the remote PowerShell session when you're finished. If you close the Windows PowerShell window without disconnecting the session, you could use up all the remote PowerShell sessions available to you, and you'll need to wait for the sessions to expire. To disconnect the remote PowerShell session, run the following command.*
+
+```
+Remove-PSSession $Session
+```
 
 This is just the basic of how to allow one user to access to multiple users. We need to write a ps script finally to get this done. We needs to allow a list of users from external files.
 

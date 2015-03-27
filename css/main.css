@@ -14,9 +14,10 @@ html, body { height: 100%; }
 
 body {
   background-color: #FFF;
-  font: 13.34px Helvetica, Arial, sans-serif;
-  font-size: small;
-  text-align: center;
+  font-family: "Proxima Nova Regular","Segoe UI",Roboto,"Droid Sans","Helvetica Neue",Arial,sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  word-wrap: break-word;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -25,9 +26,28 @@ h1, h2, h3, h4, h5, h6 {
 h1 { margin-bottom: 1em; }
 p { margin: 1em 0; }
 
-a         { color: #00a; }
-a:hover   { color: #000; }
-a:visited { color: #a0a; }
+p a {
+  font-size: 100%;
+  text-decoration: none;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  background: 0 0;
+  color: #41b7d8;
+  border-bottom: .08em solid rgba(0,0,0,.1);
+  padding-bottom: .08em;
+}
+
+a:hover   { 
+border-bottom: .08em solid #41b7d8;
+outline: 0 
+}
+
+
+::selection {
+  background: #333;
+  color: #fff;
+}
 
 /*****************************************************************************/
 /*
@@ -130,7 +150,7 @@ ul.posts span {
 /* standard */
 .post pre {
   border: 1px solid #ddd;
-  background-color: #eef;
+  background-color: #f7f7f7;
   padding: 0 .4em;
 }
 
@@ -140,7 +160,6 @@ ul.posts span {
 
 .post code {
   border: 1px solid #ddd;
-  background-color: #eef;
   padding: 0 .2em;
 }
 
@@ -160,15 +179,16 @@ ul.posts span {
 }
 
 .post blockquote {
-    background-color: #d8deea;
-    border: 1px solid #c6d1e7;
-    border-radius: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 16px;
-    padding-right: 16px;
-	margin-top: 1em;
-	margin-bottom: 1em;
-	margin-left: 40px;
-	margin-right: 40px;
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.highlight code[class*=language-] {
+  font-family: Consolas,Monaco,'Andale Mono',monospace;
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  font-size: .9em;
+  tab-size: 4;
 }
