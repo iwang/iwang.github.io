@@ -22,14 +22,14 @@ It turns out we need to add permission to allow one user to view others detailed
 
 ### connect to remote exchange server ###
 
-```script
+```
 $session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri "https://ps.outlook.com/powershell/" -Credential $cred -Authentication Basic -AllowRedirection
 ```
 There will a popover to enter your admin crendentials. This may only work for outlook 365, the url needs to be replaced if necessary.
 
 ### create session ###
 
-```script
+```
 Import-PSSession $session
 ```
 During seesion import, it will start load Exchange cmdlets to local.
@@ -42,13 +42,13 @@ local command. Use the AllowClobber parameter if you want to shadow existing loc
 
 You need to set your execution policy.
 
-```script
+```
 Set-ExecutionPolicy RemoteSigned
 ```
 
 After connection is established successfully, try below cmdlet
 
-```script
+```
 get-mailbox
 ```
 you should see a list of all users in your organization.
@@ -59,7 +59,7 @@ you should see a list of all users in your organization.
 [Add-MailboxFolderPermission](https://technet.microsoft.com/en-us/library/dd298062(v=exchg.141).aspx)
 [Set-MailboxFolderPermission](https://technet.microsoft.com/en-us/library/ff522363(v=exchg.141).aspx)
 
-```script
+```
 add-MailboxFolderPermission -identity ivan_owner@abc.com:
 \Calendar -User ivan_scheduler@abc.com -accessrights LimitedDetails
 ```
