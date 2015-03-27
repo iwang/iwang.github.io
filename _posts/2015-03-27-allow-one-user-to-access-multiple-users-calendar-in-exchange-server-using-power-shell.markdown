@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "allow one user to access multiple users calendar in exchange server using power shell"
-date: 2015-03-27 9:00:00
+date: 2015-03-27 09:00:00
 tags: exchange ews powershell
 categories: dev
 ---
