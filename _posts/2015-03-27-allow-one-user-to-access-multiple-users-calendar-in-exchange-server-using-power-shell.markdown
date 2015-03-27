@@ -16,7 +16,7 @@ It turns out we need to add permission to allow one user to view others detailed
 
 2. IVS scheduler needs to send permission request by clicking "share calendar" in outlook.
 
-3. <a name="num3">Exchange Admin can set permission via power shell. A batch update is possible.</a>
+3. <p name="num3">Exchange Admin can set permission via power shell. A batch update is possible.</p>
 
  [\#3](#num3) is preferable. IT can run a script to get things done instead bothering end users to change this manually. Below is the details.
 
@@ -56,7 +56,7 @@ you should see a list of all users in your organization.
 
 ### set permission ###
 
-[Add-MailboxFolderPermission](https://technet.microsoft.com/en-us/library/dd298062(v=exchg.141).aspx)
+[Add-MailboxFolderPermission](https://technet.microsoft.com/en-us/library/dd298062(v=exchg.141).aspx), 
 [Set-MailboxFolderPermission](https://technet.microsoft.com/en-us/library/ff522363(v=exchg.141).aspx)
 
 ```
