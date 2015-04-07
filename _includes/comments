@@ -1,0 +1,10 @@
+{% if site.comments.provider %}
+
+{% case site.comments.provider %}
+{% when "disqus" %}
+  {% include comments-providers/disqus %}
+{% when "custom" %}
+  {% include custom/comments %}
+{% endcase %}
+
+{% endif %}

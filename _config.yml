@@ -1,3 +1,8 @@
 name: Ivan's
 markdown: redcarpet
 pygments: true
+
+comments:
+    provider: disqus
+    disqus :
+      short_name : ivanw
