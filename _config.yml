@@ -1,8 +1,14 @@
 name: Ivan's
 markdown: redcarpet
-pygments: true
+highlighter: pygments
 
 comments:
     provider: disqus
     disqus :
       short_name : ivanw
+
+analytics:
+    provider: google
+    google:
+        tracking_id: UA-61682249-1
+

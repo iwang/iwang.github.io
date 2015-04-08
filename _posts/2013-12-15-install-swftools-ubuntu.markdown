@@ -3,6 +3,7 @@ layout: post
 title:  "Install Swftools in Ubuntu"
 date:   2013-12-15 18:27:05
 tags: swftools
+comments: false
 categories: miranda
 ---
 
