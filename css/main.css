@@ -4,7 +4,7 @@
 /*
 /*****************************************************************************/
 
-/* Global Reset 
+/* Global Reset
 * {
   margin: 0;
   padding: 0;
@@ -38,11 +38,17 @@ p a, ul a, ol a {
   padding-bottom: .08em;
 }
 
-a:hover   { 
+a:hover   {
 border-bottom: .08em solid #41b7d8;
-outline: 0 
+outline: 0
 }
 
+pre {
+  font-size: 12px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  overflow-x: auto
+}
 
 ::selection {
   background: #333;
@@ -67,6 +73,10 @@ ul.posts span {
   color: #aaa;
   font-family: Monaco, "Courier New", monospace;
   font-size: 80%;
+}
+
+code, pre {
+  font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
 }
 
 /*****************************************************************************/
@@ -150,7 +160,7 @@ ul.posts span {
 /* standard */
 .post pre {
   border: 1px solid #ddd;
-  background-color: #f7f7f7;
+  background-color: #efefef;
   padding: 0 .4em;
 }
 
@@ -158,9 +168,16 @@ ul.posts span {
   margin-left: 1.35em;
 }
 
-.post code {
-  border: 1px solid #ddd;
-  padding: 0 .2em;
+pre code, li code {
+  font-size: 12px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+
+  margin: 0 2px;
+  padding: 0 5px;
+  border: 1px solid #f7f7f7;
+  background-color: #efefef;
+  border-radius: 3px;
 }
 
 .post pre code {
@@ -184,11 +201,34 @@ ul.posts span {
   border-left: 4px solid #ddd;
 }
 
-.highlight code[class*=language-] {
-  font-family: Consolas,Monaco,'Andale Mono',monospace;
-  padding: 1em;
-  margin: .5em 0;
-  overflow: auto;
-  font-size: .9em;
-  tab-size: 4;
+.highlight {
+  background-color: #efefef;
+  font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+  font-size: 12px;
+  font-size: 0.75rem;
+  line-height: 2.1667;
+  color: #333332;
+  margin-bottom: 1.5em;
+  border-radius: 4px;
 }
+
+.highlight pre {
+  position: relative;
+  margin: 0;
+  padding: 1em;
+  overflow: auto;
+}
+
+p code, li code {
+  font-size: 12px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  margin: 0 2px;
+  padding: 0 5px;
+  border: 1px solid #f7f7f7;
+  background-color: #efefef;
+  border-radius: 3px;
+}
+
+
