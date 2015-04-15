@@ -201,6 +201,10 @@ pre code, li code {
   border-left: 4px solid #ddd;
 }
 
+.page-title {
+    font-size: 1.5em;
+}
+
 .highlight {
   background-color: #efefef;
   font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
