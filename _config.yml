@@ -1,6 +1,7 @@
 name: Ivan's
-markdown: redcarpet
-highlighter: pygments
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
 comments:
     provider: disqus
